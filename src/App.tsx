@@ -22,12 +22,13 @@ function App() {
           count is {count}
         </button>
         <p>
-          <link
-            rel="stylesheet"
+          <a
             href="https://api.stiky.site/swagger-ui/index.html"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             Swagger UI 보기
-          </link>
+          </a>
         </p>
       </div>
       <p className="read-the-docs">
