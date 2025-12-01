@@ -1,40 +1,37 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
+import { useAuthStore } from "./stores/authStore.ts";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import LoginPage from "./pages/LoginPage.tsx";
+import OAuthCallbackPage from "./pages/OAuthCallbackPage.tsx";
+import type { JSX } from "react";
+
+const PrivateRoute = ({ children }: { children: JSX.Element }) => {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  return isAuthenticated ? children : <Navigate to={"/login"} />;
+};
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          <a
-            href="https://api.stiky.site/swagger-ui/index.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Swagger UI 보기
-          </a>
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path={"/login"} element={<LoginPage />} />
+        <Route path={"/login/callback"} element={<OAuthCallbackPage />} />
+
+        <Route
+          path={"/"}
+          element={
+            <PrivateRoute>
+              <div>
+                <h1>메인 페이지</h1>
+                <button onClick={() => useAuthStore.getState().logout()}>
+                  로그아웃
+                </button>
+              </div>
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
