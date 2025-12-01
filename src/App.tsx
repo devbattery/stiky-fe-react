@@ -5,6 +5,7 @@ import http from "./api/http.ts";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage.tsx";
 import OAuthCallbackPage from "./pages/OAuthCallbackPage.tsx";
+import SignupPage from "./pages/SignupPage.tsx";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -30,6 +31,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path={"/login"} element={<LoginPage />}></Route>
+        <Route path={"/signup"} element={<SignupPage />} />
         <Route path={"/login/callback"} element={<OAuthCallbackPage />}></Route>
         <Route
           path={"/"}

@@ -1,6 +1,7 @@
 export interface SignupRequest {
   email: string;
   password: string;
+  repeatPassword: string;
   nickname: string;
 }
 

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import { useAuthStore } from "../stores/authStore.ts";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from "../api/authApi.ts";
 
 const LoginPage = () => {
@@ -50,6 +50,11 @@ const LoginPage = () => {
         <button onClick={() => handleSocialLogin("kakao")}>Kakao Login</button>
         <button onClick={() => handleSocialLogin("naver")}>Naver Login</button>
       </form>
+
+      <div style={{ marginTop: "20px" }}>
+        <p>아직 계정이 없으신가요?</p>
+        <Link to="/signup">회원가입 하러 가기</Link>
+      </div>
     </div>
   );
 };
