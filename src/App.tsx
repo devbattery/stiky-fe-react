@@ -1,33 +1,44 @@
 import "./App.css";
 import { useAuthStore } from "./stores/authStore.ts";
+import { useEffect, useState } from "react";
+import http from "./api/http.ts";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage.tsx";
 import OAuthCallbackPage from "./pages/OAuthCallbackPage.tsx";
-import type { JSX } from "react";
-
-const PrivateRoute = ({ children }: { children: JSX.Element }) => {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  return isAuthenticated ? children : <Navigate to={"/login"} />;
-};
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const { data } = await http.post("/api/auth/reissue");
+        setAccessToken(data.accessToken);
+      } catch (e) {
+        // 로그인 상태 X
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    checkAuth();
+  }, [setAccessToken]);
+
+  if (isLoading) return <div>Loading...</div>;
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={"/login"} element={<LoginPage />} />
-        <Route path={"/login/callback"} element={<OAuthCallbackPage />} />
-
+        <Route path={"/login"} element={<LoginPage />}></Route>
+        <Route path={"/login/callback"} element={<OAuthCallbackPage />}></Route>
         <Route
           path={"/"}
           element={
-            <PrivateRoute>
-              <div>
-                <h1>메인 페이지</h1>
-                <button onClick={() => useAuthStore.getState().logout()}>
-                  로그아웃
-                </button>
-              </div>
-            </PrivateRoute>
+            useAuthStore.getState().isAuthenticated ? (
+              <div>Main</div>
+            ) : (
+              <Navigate to={"/login"} />
+            )
           }
         />
       </Routes>
