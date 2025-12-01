@@ -6,7 +6,7 @@ const http = axios.create({
   withCredentials: true,
 });
 
-// Request Interceptor
+// Request: 메모리에 있는 Access Token을 헤더에 넣는 역할
 http.interceptors.request.use(
   (config) => {
     const token = useAuthStore.getState().accessToken;
@@ -18,16 +18,27 @@ http.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-// Response Interceptor
+// Response: 401 발생 시 재발급하는 역할
 http.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.statue === 401) {
-      // TODO: RefreshToken 재발급 로직 백엔드 구현 후 여기에도 추가
-      // 일단 로그아웃 처리로
-      useAuthStore.getState().logout();
-      window.location.href = "/login";
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const { data } = await http.post("/api/auth/reissue");
+        useAuthStore.getState().setAccessToken(data.accessToken);
+        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+        return http(originalRequest);
+      } catch (refreshError) {
+        useAuthStore.getState().logout();
+        window.location.href = "/login";
+        return Promise.reject(refreshError);
+      }
     }
+
     return Promise.reject(error);
   },
 );
