@@ -10,6 +10,7 @@ import SignupPage from "./pages/SignupPage.tsx";
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -18,6 +19,7 @@ function App() {
         setAccessToken(data.accessToken);
       } catch (e) {
         // 로그인 상태 X
+        console.log("비로그인 유저 또는 토큰 만료.");
       } finally {
         setIsLoading(false);
       }
@@ -36,11 +38,7 @@ function App() {
         <Route
           path={"/"}
           element={
-            useAuthStore.getState().isAuthenticated ? (
-              <div>Main</div>
-            ) : (
-              <Navigate to={"/login"} />
-            )
+            isAuthenticated ? <div>Main</div> : <Navigate to={"/login"} />
           }
         />
       </Routes>
