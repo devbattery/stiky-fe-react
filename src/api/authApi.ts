@@ -20,5 +20,5 @@ export const getTokenByCode = async (code: string): Promise<LoginResponse> => {
 };
 
 export const logoutApi = async (): Promise<void> => {
-  await http.post("/api/post/logout");
+  await http.post("/api/auth/logout");
 };
