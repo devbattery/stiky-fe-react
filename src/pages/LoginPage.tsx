@@ -44,11 +44,15 @@ const LoginPage = () => {
         <button type={"submit"}>로그인</button>
 
         <hr />
-        <button onClick={() => handleSocialLogin("google")}>
+        <button type={"button"} onClick={() => handleSocialLogin("google")}>
           Google Login
         </button>
-        <button onClick={() => handleSocialLogin("kakao")}>Kakao Login</button>
-        <button onClick={() => handleSocialLogin("naver")}>Naver Login</button>
+        <button type={"button"} onClick={() => handleSocialLogin("kakao")}>
+          Kakao Login
+        </button>
+        <button type={"button"} onClick={() => handleSocialLogin("naver")}>
+          Naver Login
+        </button>
       </form>
 
       <div style={{ marginTop: "20px" }}>
