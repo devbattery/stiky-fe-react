@@ -11,6 +11,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const logout = useAuthStore((state) => state.logout);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -18,7 +19,6 @@ function App() {
         const { data } = await http.post("/api/auth/reissue");
         setAccessToken(data.accessToken);
       } catch (e) {
-        // 로그인 상태 X
         console.log("비로그인 유저 또는 토큰 만료.");
       } finally {
         setIsLoading(false);
@@ -26,6 +26,16 @@ function App() {
     };
     checkAuth();
   }, [setAccessToken]);
+
+  const handleLogout = async () => {
+    try {
+      await http.post("/api/auth/logout");
+    } catch (error) {
+      console.log("로그아웃 요청 중 에러 발생: ", error);
+    } finally {
+      logout();
+    }
+  };
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -38,7 +48,15 @@ function App() {
         <Route
           path={"/"}
           element={
-            isAuthenticated ? <div>Main</div> : <Navigate to={"/login"} />
+            isAuthenticated ? (
+              <div style={{ padding: "20px" }}>
+                <h1>Main Page</h1>
+                <p>안녕?</p>
+                <button onClick={handleLogout}>로그아웃~</button>
+              </div>
+            ) : (
+              <Navigate to={"/login"} />
+            )
           }
         />
       </Routes>
