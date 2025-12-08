@@ -5,6 +5,14 @@
       "destination": "https://stiky-api-mh6lf6mzkq-du.a.run.app/api/:path*"
     },
     {
+      "source": "/oauth2/:path*",
+      "destination": "https://stiky-api-mh6lf6mzkq-du.a.run.app/oauth2/:path*"
+    },
+    {
+      "source": "/login/oauth2/:path*",
+      "destination": "https://stiky-api-mh6lf6mzkq-du.a.run.app/login/oauth2/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
