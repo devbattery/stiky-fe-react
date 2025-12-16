@@ -1,19 +1,22 @@
-import { create } from "zustand";
+import { defineStore } from "pinia";
 
 interface AuthState {
   accessToken: string | null;
-  isAuthenticated: boolean;
-  setAccessToken: (token: string) => void;
-  logout: () => void;
 }
 
-export const useAuthStore = create<AuthState>()((set) => ({
-  accessToken: null,
-  isAuthenticated: false,
-  setAccessToken: (token) =>
-    set({
-      accessToken: token,
-      isAuthenticated: true,
-    }),
-  logout: () => set({ accessToken: null, isAuthenticated: false }),
-}));
+export const useAuthStore = defineStore("auth", {
+  state: (): AuthState => ({
+    accessToken: null,
+  }),
+  getters: {
+    isAuthenticated: (state) => Boolean(state.accessToken),
+  },
+  actions: {
+    setAccessToken(token: string) {
+      this.accessToken = token;
+    },
+    logout() {
+      this.accessToken = null;
+    },
+  },
+});
