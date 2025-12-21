@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { ref } from "vue";
 import { useRouter, RouterLink } from "vue-router";
 import { login } from "../api/authApi";
@@ -20,7 +20,7 @@ const handleLogin = async () => {
   }
 };
 
-const handleSocialLogin = (provider: string) => {
+const handleSocialLogin = (provider) => {
   window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/${provider}`;
 };
 </script>

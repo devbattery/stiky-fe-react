@@ -1,11 +1,10 @@
-<script setup lang="ts">
+<script setup>
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { signup } from "../api/authApi";
-import type { SignupRequest } from "../types/auth";
 
 const router = useRouter();
-const formData = reactive<SignupRequest>({
+const formData = reactive({
   email: "",
   password: "",
   repeatPassword: "",
@@ -30,7 +29,7 @@ const handleSubmit = async () => {
     await signup({ ...formData });
     alert("회원가입이 완료되었습니다! 로그인해주세요.");
     router.push({ name: "login" });
-  } catch (error: any) {
+  } catch (error) {
     console.error(error);
     if (error?.response?.data?.message) {
       errorMsg.value = error.response.data.message;

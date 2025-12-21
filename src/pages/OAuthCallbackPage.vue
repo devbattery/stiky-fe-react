@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getTokenByCode } from "../api/authApi";
